@@ -1,11 +1,10 @@
 
 "use client"; // Add this because we'll use client-side hooks and state
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 import React, { useState } from 'react'; // Import useState for managing selected role
 import { Button } from '@/components/ui/button';
-import { ArrowRight, LogIn } from 'lucide-react';
+import { LogIn, Loader2 } from 'lucide-react';
 import { Logo } from '@/components/icons/Logo';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'; // For styling the login section
 import { Label } from '@/components/ui/label';
@@ -23,29 +22,33 @@ export default function HomePage() {
   const router = useRouter();
   const { setCurrentRole, availableRoles } = useRole();
   const [selectedRole, setSelectedRole] = useState<UserRole>(availableRoles[0]); // Default to the first role
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleLogin = () => {
     if (selectedRole) {
       setCurrentRole(selectedRole);
+      setIsLoggingIn(true);
       router.push('/dashboard'); // Navigate to generic dashboard, which will redirect
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-background to-secondary p-6 text-center">
-      <div className="mb-12">
+    <main
+      id="main-content"
+      className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-background to-secondary p-6 text-center"
+    >
+      <header className="mb-12 flex flex-col items-center">
         <Logo className="h-16 w-auto text-primary" />
-      </div>
-      <h1 className="font-headline text-5xl md:text-7xl font-bold mb-6 text-primary">
-        Norruva Digital Product Passport
-      </h1>
-      <p className="text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto mb-10">
-        Securely manage your product data, ensure EU compliance, and harness the power of AI for streamlined operations.
-      </p>
-      {/* Removed the "Learn More" button and its container div */}
+        <h1 className="font-headline text-5xl md:text-7xl font-bold mb-6 text-primary">
+          Norruva Digital Product Passport
+        </h1>
+        <p className="text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto">
+          Securely manage your product data, ensure EU compliance, and harness the power of AI for streamlined operations.
+        </p>
+      </header>
 
       {/* Mock Login Section */}
-      <Card className="w-full max-w-md shadow-xl bg-card mt-8"> {/* Added mt-8 for spacing */}
+      <Card className="w-full max-w-md shadow-xl bg-card mt-8 animate-in fade-in-0 zoom-in-95">
         <CardHeader>
           <CardTitle className="font-headline text-2xl flex items-center justify-center text-primary">
             <LogIn className="mr-2 h-6 w-6" /> Access Your Dashboard
@@ -70,15 +73,23 @@ export default function HomePage() {
               </SelectContent>
             </Select>
           </div>
-          <Button onClick={handleLogin} size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-            Login as {formatRoleNameForDisplay(selectedRole)}
+          <Button
+            onClick={handleLogin}
+            size="lg"
+            className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
+            disabled={isLoggingIn}
+          >
+            {isLoggingIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isLoggingIn
+              ? 'Logging in…'
+              : `Login as ${formatRoleNameForDisplay(selectedRole)}`}
           </Button>
         </CardContent>
       </Card>
 
-      <footer className="absolute bottom-8 text-muted-foreground text-sm">
+      <footer className="mt-10 text-muted-foreground text-sm">
         © {new Date().getFullYear()} Norruva. All rights reserved.
       </footer>
-    </div>
+    </main>
   );
 }
