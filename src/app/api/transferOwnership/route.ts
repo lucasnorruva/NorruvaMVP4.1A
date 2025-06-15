@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { DPP_TOKEN_ADDRESS } from '/workspace/nextjs-dpp/src/config/contractAddresses'; // Use absolute path
+// Use a relative import for the contract address configuration
+import { DPP_TOKEN_ADDRESS } from '../../../config/contractAddresses';
 import { ethers } from 'ethers'; // Assuming ethers.js is used
 
 export async function POST(request: Request) {

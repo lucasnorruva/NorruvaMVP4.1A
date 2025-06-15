@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { ethers } from 'ethers'; // Assuming ethers.js is used
-import { DPP_TOKEN_ADDRESS } from '/workspace/digital-product-passport/src/config/contractAddresses'; // Use absolute path
+// Use a relative import for the contract address configuration
+import { DPP_TOKEN_ADDRESS } from '../../../config/contractAddresses';
 import DPPToken from '/workspace/digital-product-passport/artifacts/contracts/DPPToken.sol/DPPToken.json'; // Assuming Hardhat compilation output
 
 export async function POST(request: Request) {
