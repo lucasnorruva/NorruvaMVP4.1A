@@ -43,7 +43,20 @@ export default function PublicPassportPage() {
 
   const updateTrackedStatus = useCallback(() => {
     const storedIdsString = localStorage.getItem(TRACKED_PRODUCTS_STORAGE_KEY);
-    const trackedIds: string[] = storedIdsString ? JSON.parse(storedIdsString) : [];
+    let trackedIds: string[] = [];
+    if (storedIdsString) {
+      try {
+        trackedIds = JSON.parse(storedIdsString);
+      } catch (err) {
+        console.error('Failed to parse tracked product IDs from localStorage', err);
+        localStorage.removeItem(TRACKED_PRODUCTS_STORAGE_KEY);
+        toast({
+          title: 'Local Storage Reset',
+          description: 'Tracked product data was corrupted and has been cleared.',
+          variant: 'destructive'
+        });
+      }
+    }
     setIsTracked(trackedIds.includes(passportId));
   }, [passportId]);
 
@@ -67,7 +80,20 @@ export default function PublicPassportPage() {
 
   const handleToggleTrackProduct = () => {
     const storedIdsString = localStorage.getItem(TRACKED_PRODUCTS_STORAGE_KEY);
-    let trackedIds: string[] = storedIdsString ? JSON.parse(storedIdsString) : [];
+    let trackedIds: string[] = [];
+    if (storedIdsString) {
+      try {
+        trackedIds = JSON.parse(storedIdsString);
+      } catch (err) {
+        console.error('Failed to parse tracked product IDs from localStorage', err);
+        localStorage.removeItem(TRACKED_PRODUCTS_STORAGE_KEY);
+        toast({
+          title: 'Local Storage Reset',
+          description: 'Tracked product data was corrupted and has been cleared.',
+          variant: 'destructive'
+        });
+      }
+    }
     const productIndex = trackedIds.indexOf(passportId);
 
     if (productIndex > -1) {

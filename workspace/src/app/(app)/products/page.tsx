@@ -111,7 +111,20 @@ export default function ProductsPage() {
 
   useEffect(() => {
     const storedProductsString = localStorage.getItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
-    const userAddedStoredProducts: StoredUserProduct[] = storedProductsString ? JSON.parse(storedProductsString) : [];
+    let userAddedStoredProducts: StoredUserProduct[] = [];
+    if (storedProductsString) {
+      try {
+        userAddedStoredProducts = JSON.parse(storedProductsString);
+      } catch (err) {
+        console.error('Failed to parse user products from localStorage', err);
+        localStorage.removeItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
+        toast({
+          title: 'Local Storage Reset',
+          description: 'Stored product data was corrupted and has been cleared.',
+          variant: 'destructive'
+        });
+      }
+    }
 
     const userAddedDisplayable: ProductWithCompleteness[] = userAddedStoredProducts.map(p => ({
       ...p,
@@ -224,7 +237,20 @@ export default function ProductsPage() {
 
     if (productToDelete.id.startsWith("USER_PROD")) {
       const storedProductsString = localStorage.getItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
-      let userAddedProducts: StoredUserProduct[] = storedProductsString ? JSON.parse(storedProductsString) : [];
+      let userAddedProducts: StoredUserProduct[] = [];
+      if (storedProductsString) {
+        try {
+          userAddedProducts = JSON.parse(storedProductsString);
+        } catch (err) {
+          console.error('Failed to parse user products from localStorage', err);
+          localStorage.removeItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
+          toast({
+            title: 'Local Storage Reset',
+            description: 'Stored product data was corrupted and has been cleared.',
+            variant: 'destructive'
+          });
+        }
+      }
       userAddedProducts = userAddedProducts.filter(p => p.id !== productToDelete.id);
       localStorage.setItem(USER_PRODUCTS_LOCAL_STORAGE_KEY, JSON.stringify(userAddedProducts));
     }

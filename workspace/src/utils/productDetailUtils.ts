@@ -174,7 +174,13 @@ export async function fetchProductDetails(productId: string): Promise<SimpleProd
 
   const storedProductsString = typeof window !== 'undefined' ? localStorage.getItem(USER_PRODUCTS_LOCAL_STORAGE_KEY) : null;
   if (storedProductsString) {
-    const userProducts: StoredUserProduct[] = JSON.parse(storedProductsString);
+    let userProducts: StoredUserProduct[] = [];
+    try {
+      userProducts = JSON.parse(storedProductsString);
+    } catch (err) {
+      console.error('Failed to parse user products from localStorage', err);
+      localStorage.removeItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
+    }
     const userProductData = userProducts.find(p => p.id === productId);
     if (userProductData) {
       let parsedCustomAttributes: CustomAttribute[] = [];

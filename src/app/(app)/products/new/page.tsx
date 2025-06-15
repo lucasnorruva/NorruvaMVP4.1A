@@ -158,7 +158,20 @@ export default function AddNewProductPage() {
   useEffect(() => {
     if (isEditMode && editProductId) {
       const storedProductsString = localStorage.getItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
-      const userProducts: StoredUserProduct[] = storedProductsString ? JSON.parse(storedProductsString) : [];
+      let userProducts: StoredUserProduct[] = [];
+      if (storedProductsString) {
+        try {
+          userProducts = JSON.parse(storedProductsString);
+        } catch (err) {
+          console.error('Failed to parse user products from localStorage', err);
+          localStorage.removeItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
+          toast({
+            title: 'Local Storage Reset',
+            description: 'Stored product data was corrupted and has been cleared.',
+            variant: 'destructive'
+          });
+        }
+      }
       const productToEdit = userProducts.find(p => p.id === editProductId);
       if (productToEdit) {
         const editData: InitialProductFormData = {
@@ -343,7 +356,20 @@ export default function AddNewProductPage() {
 
     try {
       const storedProductsString = localStorage.getItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
-      let userProducts: StoredUserProduct[] = storedProductsString ? JSON.parse(storedProductsString) : [];
+      let userProducts: StoredUserProduct[] = [];
+      if (storedProductsString) {
+        try {
+          userProducts = JSON.parse(storedProductsString);
+        } catch (err) {
+          console.error('Failed to parse user products from localStorage', err);
+          localStorage.removeItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
+          toast({
+            title: 'Local Storage Reset',
+            description: 'Stored product data was corrupted and has been cleared.',
+            variant: 'destructive'
+          });
+        }
+      }
 
       const productCoreData: StoredUserProduct = {
         id: isEditMode && editProductId ? editProductId : `USER_PROD_${Date.now().toString().slice(-6)}`,

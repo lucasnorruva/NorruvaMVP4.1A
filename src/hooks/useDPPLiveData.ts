@@ -30,7 +30,20 @@ export function useDPPLiveData() {
 
   useEffect(() => {
     const storedProductsString = localStorage.getItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
-    const userAddedProducts: DigitalProductPassport[] = storedProductsString ? JSON.parse(storedProductsString) : [];
+    let userAddedProducts: DigitalProductPassport[] = [];
+    if (storedProductsString) {
+      try {
+        userAddedProducts = JSON.parse(storedProductsString);
+      } catch (err) {
+        console.error('Failed to parse user products from localStorage', err);
+        localStorage.removeItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
+        toast({
+          title: 'Local Storage Reset',
+          description: 'Stored product data was corrupted and has been cleared.',
+          variant: 'destructive'
+        });
+      }
+    }
     
     const combinedProducts = [
       ...MOCK_DPPS.filter(mockDpp => !userAddedProducts.find(userDpp => userDpp.id === mockDpp.id)),
@@ -120,7 +133,20 @@ export function useDPPLiveData() {
     const productIsUserAdded = productToDeleteId.startsWith("USER_PROD");
     if (productIsUserAdded) {
       const storedProductsString = localStorage.getItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
-      let userProducts: DigitalProductPassport[] = storedProductsString ? JSON.parse(storedProductsString) : [];
+      let userProducts: DigitalProductPassport[] = [];
+      if (storedProductsString) {
+        try {
+          userProducts = JSON.parse(storedProductsString);
+        } catch (err) {
+          console.error('Failed to parse user products from localStorage', err);
+          localStorage.removeItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
+          toast({
+            title: 'Local Storage Reset',
+            description: 'Stored product data was corrupted and has been cleared.',
+            variant: 'destructive'
+          });
+        }
+      }
       userProducts = userProducts.filter(p => p.id !== productToDeleteId);
       localStorage.setItem(USER_PRODUCTS_LOCAL_STORAGE_KEY, JSON.stringify(userProducts));
     }

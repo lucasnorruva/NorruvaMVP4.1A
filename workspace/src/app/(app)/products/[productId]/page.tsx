@@ -43,7 +43,20 @@ export default function ProductDetailPage() {
     if (product.id.startsWith("USER_PROD")) {
       try {
         const storedProductsString = localStorage.getItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
-        let userProducts: StoredUserProduct[] = storedProductsString ? JSON.parse(storedProductsString) : [];
+        let userProducts: StoredUserProduct[] = [];
+        if (storedProductsString) {
+          try {
+            userProducts = JSON.parse(storedProductsString);
+          } catch (err) {
+            console.error('Failed to parse user products from localStorage', err);
+            localStorage.removeItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
+            toast({
+              title: 'Local Storage Reset',
+              description: 'Stored product data was corrupted and has been cleared.',
+              variant: 'destructive'
+            });
+          }
+        }
         const productIndex = userProducts.findIndex(p => p.id === product.id);
         if (productIndex > -1) {
           userProducts[productIndex] = {
@@ -115,7 +128,20 @@ export default function ProductDetailPage() {
 
       if (product.id.startsWith("USER_PROD")) {
         const storedProductsString = localStorage.getItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
-        let userProducts: StoredUserProduct[] = storedProductsString ? JSON.parse(storedProductsString) : [];
+        let userProducts: StoredUserProduct[] = [];
+        if (storedProductsString) {
+          try {
+            userProducts = JSON.parse(storedProductsString);
+          } catch (err) {
+            console.error('Failed to parse user products from localStorage', err);
+            localStorage.removeItem(USER_PRODUCTS_LOCAL_STORAGE_KEY);
+            toast({
+              title: 'Local Storage Reset',
+              description: 'Stored product data was corrupted and has been cleared.',
+              variant: 'destructive'
+            });
+          }
+        }
         const productIndex = userProducts.findIndex(p => p.id === product.id);
         if (productIndex > -1) {
           if (!userProducts[productIndex].complianceSummary) { 

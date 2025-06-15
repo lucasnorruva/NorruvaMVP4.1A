@@ -24,7 +24,20 @@ export default function MyTrackedProductsPage() {
   const loadTrackedProducts = useCallback(() => {
     setIsLoading(true);
     const storedIdsString = localStorage.getItem(TRACKED_PRODUCTS_STORAGE_KEY);
-    const trackedIds: string[] = storedIdsString ? JSON.parse(storedIdsString) : [];
+    let trackedIds: string[] = [];
+    if (storedIdsString) {
+      try {
+        trackedIds = JSON.parse(storedIdsString);
+      } catch (err) {
+        console.error('Failed to parse tracked product IDs from localStorage', err);
+        localStorage.removeItem(TRACKED_PRODUCTS_STORAGE_KEY);
+        toast({
+          title: 'Local Storage Reset',
+          description: 'Tracked product data was corrupted and has been cleared.',
+          variant: 'destructive'
+        });
+      }
+    }
     
     const productsToDisplay: TrackedProductDisplayInfo[] = trackedIds.map(id => {
       const publicInfo = MOCK_PUBLIC_PASSPORTS[id] || MOCK_PUBLIC_PASSPORTS[`PROD${id.replace('DPP','')}`] ; // Attempt mapping if needed
@@ -57,7 +70,20 @@ export default function MyTrackedProductsPage() {
 
   const handleUntrackProduct = (productId: string) => {
     const storedIdsString = localStorage.getItem(TRACKED_PRODUCTS_STORAGE_KEY);
-    let trackedIds: string[] = storedIdsString ? JSON.parse(storedIdsString) : [];
+    let trackedIds: string[] = [];
+    if (storedIdsString) {
+      try {
+        trackedIds = JSON.parse(storedIdsString);
+      } catch (err) {
+        console.error('Failed to parse tracked product IDs from localStorage', err);
+        localStorage.removeItem(TRACKED_PRODUCTS_STORAGE_KEY);
+        toast({
+          title: 'Local Storage Reset',
+          description: 'Tracked product data was corrupted and has been cleared.',
+          variant: 'destructive'
+        });
+      }
+    }
     trackedIds = trackedIds.filter(id => id !== productId);
     localStorage.setItem(TRACKED_PRODUCTS_STORAGE_KEY, JSON.stringify(trackedIds));
     loadTrackedProducts(); // Reload the list

@@ -67,7 +67,20 @@ export default function SupplyChainTab({ product, onSupplyChainLinksChange }: Su
   useEffect(() => {
     setIsClient(true);
     const storedSuppliersString = localStorage.getItem(USER_SUPPLIERS_LOCAL_STORAGE_KEY);
-    const userAddedSuppliers: Supplier[] = storedSuppliersString ? JSON.parse(storedSuppliersString) : [];
+    let userAddedSuppliers: Supplier[] = [];
+    if (storedSuppliersString) {
+      try {
+        userAddedSuppliers = JSON.parse(storedSuppliersString);
+      } catch (err) {
+        console.error('Failed to parse suppliers from localStorage', err);
+        localStorage.removeItem(USER_SUPPLIERS_LOCAL_STORAGE_KEY);
+        toast({
+          title: 'Local Storage Reset',
+          description: 'Stored supplier data was corrupted and has been cleared.',
+          variant: 'destructive'
+        });
+      }
+    }
     const combinedSuppliers = [
       ...MOCK_SUPPLIERS.filter(mockSup => !userAddedSuppliers.find(userSup => userSup.id === mockSup.id)),
       ...userAddedSuppliers
