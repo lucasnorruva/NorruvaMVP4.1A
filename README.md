@@ -227,6 +227,16 @@ If the job ID is unknown a 404 error is returned:
     npm run copy:openapi
     ```
 
+### Environment Variables
+
+Add the deployed contract addresses to your `.env` file so the frontend can connect to them:
+
+```bash
+NEXT_PUBLIC_DPP_TOKEN_ADDRESS=0xDeployedDppTokenProxy
+NEXT_PUBLIC_NORU_TOKEN_ADDRESS=0xDeployedNoruTokenProxy
+NEXT_PUBLIC_GOVERNOR_ADDRESS=0xDeployedGovernorContract
+```
+
 ### Running the Development Server
 
 1.  **Start the Genkit development server (for AI features):**
