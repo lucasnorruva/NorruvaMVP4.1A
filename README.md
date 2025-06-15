@@ -269,6 +269,13 @@ creation, QR validation, anchoring, and ownership transfer.
 
 Use `npm run test:watch` during development to re-run tests on file changes.
 
+To run the Hardhat smart contract tests, change into the `workspace/` directory and execute:
+
+```bash
+cd workspace
+npm run test:contracts
+```
+
 ### Authentication
 
 All `/api/v1/*` endpoints expect an API key using the `Authorization` header with the `Bearer` scheme. Example:
