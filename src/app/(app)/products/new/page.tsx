@@ -90,7 +90,6 @@ export interface StoredUserProduct extends Omit<ProductFormData, 'batteryRegulat
   batteryRegulation?: Partial<BatteryRegulationDetails>; // For detailed battery data for editing
 }
 
-const USER_PRODUCTS_LOCAL_STORAGE_KEY = 'norruvaUserProducts';
 
 const defaultBatteryRegulationState: Partial<BatteryRegulationDetails> = {
   status: "not_applicable", batteryChemistry: "", batteryPassportId: "",
