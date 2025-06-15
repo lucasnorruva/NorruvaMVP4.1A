@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   title: Norruva DPP API
   version: v1
-  description: Conceptual API endpoints for managing Digital Product Passports.
+  description: Conceptual API endpoints for managing Digital Product Passports. This specification is a proof-of-concept and not production-ready.
 paths:
   /api/v1/dpp/{productId}:
     get:
